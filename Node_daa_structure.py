@@ -27,6 +27,13 @@ class markerNode:
         self.eastConnectedNode = east
         self.next = None
 
+    def update(self, north = None, south = None, west = None, east = None):
+        self.northConnectedNode = north
+        self.southConnectedNode = south
+        self.westConnectedNode = west
+        self.eastConnectedNode = east
+        self.next = None
+
 class markerGraph:
     """
     Fixed map graph for Seolleung station
@@ -61,6 +68,17 @@ class routeData:
         node.next = new_node
         self.routeLength += 1
 
+    def selectNode(self, num):
+        if self.routeLength < num:
+            print("Overflow")
+            return
+        node = self.head
+        count = 0
+        while count < num:
+            node = node.next
+            count += 1
+        return node
+
     def deleteHead(self):
         node = self.head
         self.head = node.next
@@ -78,21 +96,38 @@ def createB2mapInSeooleung():
     global railWay_7_4_Seolleung_B2
     global railWay_8_1_Seolleung_B2, railWay_8_2_Seolleung_B2, railWay_8_3_Seolleung_B2, railWay_8_4_Seolleung_B2
     global railWay_9_1_Seolleung_B2
-    railWay_7_4_Seolleung_B2 = markerNode(2, 1, north = blockWay_51_Seolleung_B2, east = railWay_8_1_Seolleung_B2)
-    railWay_8_1_Seolleung_B2 = markerNode(2, 2, west = railWay_7_4_Seolleung_B2, east = railWay_8_2_Seolleung_B2)
-    railWay_8_2_Seolleung_B2 = markerNode(2, 2, west = railWay_8_1_Seolleung_B2, east = railWay_8_3_Seolleung_B2)
-    railWay_8_3_Seolleung_B2 = markerNode(2, 2, west = railWay_8_2_Seolleung_B2, east = railWay_8_4_Seolleung_B2)
-    railWay_8_4_Seolleung_B2 = markerNode(2, 2, west = railWay_8_3_Seolleung_B2, east = railWay_9_1_Seolleung_B2)
-    railWay_9_1_Seolleung_B2 = markerNode(2, 2, west = railWay_8_4_Seolleung_B2)
-
-    #blockWay marker
+    # blockWay marker
     global blockWay_51_Seolleung_B2, blockWay_52_Seolleung_B2
-    blockWay_51_Seolleung_B2 = markerNode(2, 51, north = blockWay_52_Seolleung_B2, west = railWay_7_4_Seolleung_B2)
-    blockWay_52_Seolleung_B2 = markerNode(2, 52, south = blockWay_51_Seolleung_B2, east = elevator_2_Seolleung_B2)
-
-    #elevator marker
+    # elevator marker
     global elevator_2_Seolleung_B2
-    elevator_2_Seolleung_B2 = markerNode(2, 3, west = blockWay_52_Seolleung_B2)
+
+    # railWay marker
+    railWay_7_4_Seolleung_B2 = markerNode(2, 1)
+    railWay_8_1_Seolleung_B2 = markerNode(2, 2)
+    railWay_8_2_Seolleung_B2 = markerNode(2, 2)
+    railWay_8_3_Seolleung_B2 = markerNode(2, 2)
+    railWay_8_4_Seolleung_B2 = markerNode(2, 2)
+    railWay_9_1_Seolleung_B2 = markerNode(2, 2)
+
+    # blockWay marke
+    blockWay_51_Seolleung_B2 = markerNode(2, 51)
+    blockWay_52_Seolleung_B2 = markerNode(2, 52)
+
+    # elevator marker
+    elevator_2_Seolleung_B2 = markerNode(2, 3)
+
+    #update
+    railWay_7_4_Seolleung_B2.update(north = blockWay_51_Seolleung_B2, east = railWay_8_1_Seolleung_B2)
+    railWay_8_1_Seolleung_B2.update(west = railWay_7_4_Seolleung_B2, east = railWay_8_2_Seolleung_B2)
+    railWay_8_2_Seolleung_B2.update(west = railWay_8_1_Seolleung_B2, east = railWay_8_3_Seolleung_B2)
+    railWay_8_3_Seolleung_B2.update(west = railWay_8_2_Seolleung_B2, east = railWay_8_4_Seolleung_B2)
+    railWay_8_4_Seolleung_B2.update(west = railWay_8_3_Seolleung_B2, east = railWay_9_1_Seolleung_B2)
+    railWay_9_1_Seolleung_B2.update(west = railWay_8_4_Seolleung_B2)
+
+    blockWay_51_Seolleung_B2.update(north = blockWay_52_Seolleung_B2, west = railWay_7_4_Seolleung_B2)
+    blockWay_52_Seolleung_B2.update(south = blockWay_51_Seolleung_B2, east = elevator_2_Seolleung_B2)
+
+    elevator_2_Seolleung_B2.update(west = blockWay_52_Seolleung_B2)
 
 
 def createB3mapInSeooleung():
@@ -102,17 +137,30 @@ def createB3mapInSeooleung():
     """
     # railWay marker
     global railWay_2_4_Seolleung_B3
-    railWay_2_4_Seolleung_B3 = markerNode(2, 1, north=blockWay_55_Seolleung_B3)
-
     # blockWay marker
     global blockWay_53_Seolleung_B3, blockWay_54_Seolleung_B3, blockWay_55_Seolleung_B3
-    blockWay_53_Seolleung_B3 = markerNode(3, 53, south=blockWay_54_Seolleung_B3, east=elevator_2_Seolleung_B3)
-    blockWay_54_Seolleung_B3 = markerNode(3, 54, north=blockWay_53_Seolleung_B3, east=blockWay_55_Seolleung_B3)
-    blockWay_55_Seolleung_B3 = markerNode(3, 55, south=railWay_2_4_Seolleung_B3, east=blockWay_54_Seolleung_B3)
-
-    #elevator marker
+    # elevator marker
     global elevator_2_Seolleung_B3
-    elevator_2_Seolleung_B3 = markerNode(3, 3, west = blockWay_53_Seolleung_B3)
+
+    # railWay marker
+    railWay_2_4_Seolleung_B3 = markerNode(2, 1)
+
+    # blockWay marker
+    blockWay_53_Seolleung_B3 = markerNode(3, 53)
+    blockWay_54_Seolleung_B3 = markerNode(3, 54)
+    blockWay_55_Seolleung_B3 = markerNode(3, 55)
+
+    # elevator marker
+    elevator_2_Seolleung_B3 = markerNode(3, 3)
+
+    #update
+    railWay_2_4_Seolleung_B3.update(north=blockWay_55_Seolleung_B3)
+
+    blockWay_53_Seolleung_B3.update(south=blockWay_54_Seolleung_B3, east=elevator_2_Seolleung_B3)
+    blockWay_54_Seolleung_B3.update(north=blockWay_53_Seolleung_B3, east=blockWay_55_Seolleung_B3)
+    blockWay_55_Seolleung_B3.update(south=railWay_2_4_Seolleung_B3, east=blockWay_54_Seolleung_B3)
+
+    elevator_2_Seolleung_B3.update(west = blockWay_53_Seolleung_B3)
 
 
 def createB1mapInHanti():
@@ -124,12 +172,21 @@ def createB1mapInHanti():
 
     #blockWay marker
     global blockWay_59_Hanti_B1
-    blockWay_59_Hanti_B1 = markerNode(1, 59, south = elevator_2_Hanti_B1, east = elevator_1_Hanti_B1)
-
     # elevator marker
     global elevator_1_Hanti_B1, elevator_2_Hanti_B1
-    elevator_1_Hanti_B1 = markerNode(1, 7, west = blockWay_59_Hanti_B1)
-    elevator_2_Hanti_B1 = markerNode(1, 8, north = blockWay_59_Hanti_B1)
+
+    # blockWay marker
+    blockWay_59_Hanti_B1 = markerNode(1, 59)
+
+    # elevator marker
+    elevator_1_Hanti_B1 = markerNode(1, 7)
+    elevator_2_Hanti_B1 = markerNode(1, 8)
+
+    #update
+    blockWay_59_Hanti_B1.update(south = elevator_2_Hanti_B1, east = elevator_1_Hanti_B1)
+
+    elevator_1_Hanti_B1.update(west = blockWay_59_Hanti_B1)
+    elevator_2_Hanti_B1.update(north = blockWay_59_Hanti_B1)
 
 
 def createB4mapInHanti():
@@ -140,19 +197,34 @@ def createB4mapInHanti():
     #railWay marker
     global railWay_2_4_Hanti_B4
     global railWay_3_1_Hanti_B4, railWay_3_2_Hanti_B4
-    railWay_2_4_Hanti_B4 = markerNode(4, 4, west = railWay_3_1_Hanti_B4)
-    railWay_3_1_Hanti_B4 = markerNode(4, 5, east = railWay_2_4_Hanti_B4, west = railWay_3_2_Hanti_B4)
-    railWay_3_2_Hanti_B4 = markerNode(4, 6, north = blockWay_56_Hanti_B4, east = railWay_2_4_Hanti_B4)
-
-    #blockWay marker
+    # blockWay marker
     global blockWay_56_Hanti_B4, blockWay_57_Hanti_B4, blockWay_58_Hanti_B4
-    blockWay_56_Hanti_B4 = markerNode(4, 53, south = railWay_3_2_Hanti_B4,west = blockWay_57_Hanti_B4)
-    blockWay_57_Hanti_B4 = markerNode(4, 54, north = blockWay_58_Hanti_B4, east = blockWay_56_Hanti_B4)
-    blockWay_58_Hanti_B4 = markerNode(4, 55, south = blockWay_57_Hanti_B4, east= elevator_1_Hanti_B4)
-
     # elevator marker
     global elevator_1_Hanti_B4
-    elevator_1_Hanti_B4 = markerNode(3, 3, east = blockWay_58_Hanti_B4)
+
+    # railWay marker
+    railWay_2_4_Hanti_B4 = markerNode(4, 4)
+    railWay_3_1_Hanti_B4 = markerNode(4, 5)
+    railWay_3_2_Hanti_B4 = markerNode(4, 6)
+
+    #blockWay marker
+    blockWay_56_Hanti_B4 = markerNode(4, 53)
+    blockWay_57_Hanti_B4 = markerNode(4, 54)
+    blockWay_58_Hanti_B4 = markerNode(4, 55)
+
+    # elevator marker
+    elevator_1_Hanti_B4 = markerNode(3, 3)
+
+    #update
+    railWay_2_4_Hanti_B4.update(west = railWay_3_1_Hanti_B4)
+    railWay_3_1_Hanti_B4.update(east = railWay_2_4_Hanti_B4, west = railWay_3_2_Hanti_B4)
+    railWay_3_2_Hanti_B4.update(north = blockWay_56_Hanti_B4, east = railWay_2_4_Hanti_B4)
+
+    blockWay_56_Hanti_B4.update(south = railWay_3_2_Hanti_B4,west = blockWay_57_Hanti_B4)
+    blockWay_57_Hanti_B4.update(north = blockWay_58_Hanti_B4, east = blockWay_56_Hanti_B4)
+    blockWay_58_Hanti_B4.update(south = blockWay_57_Hanti_B4, east= elevator_1_Hanti_B4)
+
+    elevator_1_Hanti_B4.update(east = blockWay_58_Hanti_B4)
 
 
 def createRouteForTransfer():
@@ -184,7 +256,7 @@ def createRouteForTransfer():
     routeDataList.insertLast(elevator_2_Hanti_B1)
 
 class currentLocation:
-    def __init__(self, floor, prev, cur, next):
+    def __init__(self, floor, prev = None, cur = None, next = None):
         self.floor = floor
         self.prev = prev
         self.cur = cur
@@ -198,12 +270,22 @@ class currentLocation:
         self.cur = self.next
         self.next = next
 
-
+def findMarkerLocation(findId):
+    node = routeDataList.head
+    while True:
+        if node.id == findId:
+            return node
+        node = node.next
+        if node.next == None:
+            print("Not found")
+            return
 
 #main function
 if __name__ == '__main__':
     createB2mapInSeooleung()
+    createB3mapInSeooleung()
+    createB1mapInHanti()
+    createB4mapInHanti()
     createRouteForTransfer()
 
-    while True:
-        pass
+    node = findMarkerLocation(100)
