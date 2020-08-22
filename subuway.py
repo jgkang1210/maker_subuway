@@ -111,6 +111,11 @@ def calibrate_camera(allCorners,allIds,imsize, board):
 
     return ret, camera_matrix, distortion_coefficients0, rotation_vectors, translation_vectors
 
+# Node
+
+# 1. Destination node
+
+
 
 
 #main code starts from here
