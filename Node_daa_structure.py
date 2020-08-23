@@ -18,7 +18,8 @@ class markerNode:
         For the way point
         Use Id from over 50
     """
-    def __init__(self, floor, id, north = None, south = None, west = None, east = None):
+    def __init__(self, name, floor, id, north = None, south = None, west = None, east = None):
+        self.name = name
         self.floor = floor
         self.id = id
         self.northConnectedNode = north
@@ -103,19 +104,19 @@ def createB2mapInSeooleung():
     global elevator_2_Seolleung_B2
 
     # railWay marker
-    railWay_7_4_Seolleung_B2 = markerNode(2, 1)
-    railWay_8_1_Seolleung_B2 = markerNode(2, 2)
-    railWay_8_2_Seolleung_B2 = markerNode(2, 2)
-    railWay_8_3_Seolleung_B2 = markerNode(2, 2)
-    railWay_8_4_Seolleung_B2 = markerNode(2, 2)
-    railWay_9_1_Seolleung_B2 = markerNode(2, 2)
+    railWay_7_4_Seolleung_B2 = markerNode("Seolleung_7_4_B2", 2, 1)
+    railWay_8_1_Seolleung_B2 = markerNode("Seolleung_8_1_B2", 2, 2)
+    railWay_8_2_Seolleung_B2 = markerNode("Seolleung_8_2_B2", 2, 2)
+    railWay_8_3_Seolleung_B2 = markerNode("Seolleung_8_3_B2", 2, 2)
+    railWay_8_4_Seolleung_B2 = markerNode("Seolleung_8_4_B2", 2, 2)
+    railWay_9_1_Seolleung_B2 = markerNode("Seolleung_9_4_B2", 2, 2)
 
     # blockWay marke
-    blockWay_51_Seolleung_B2 = markerNode(2, 51)
-    blockWay_52_Seolleung_B2 = markerNode(2, 52)
+    blockWay_51_Seolleung_B2 = markerNode("Seolleung_51_B2", 2, 51)
+    blockWay_52_Seolleung_B2 = markerNode("Seolleung_52_B2", 2, 52)
 
     # elevator marker
-    elevator_2_Seolleung_B2 = markerNode(2, 3)
+    elevator_2_Seolleung_B2 = markerNode("Seolleung_EV_2_B2", 2, 3)
 
     #update
     railWay_7_4_Seolleung_B2.update(north = blockWay_51_Seolleung_B2, east = railWay_8_1_Seolleung_B2)
@@ -144,15 +145,15 @@ def createB3mapInSeooleung():
     global elevator_2_Seolleung_B3
 
     # railWay marker
-    railWay_2_4_Seolleung_B3 = markerNode(3, 4)
+    railWay_2_4_Seolleung_B3 = markerNode("Seolleung_2_4_B3", 3, 4)
 
     # blockWay marker
-    blockWay_53_Seolleung_B3 = markerNode(3, 53)
-    blockWay_54_Seolleung_B3 = markerNode(3, 54)
-    blockWay_55_Seolleung_B3 = markerNode(3, 55)
+    blockWay_53_Seolleung_B3 = markerNode("Seolleung_53_B3", 3, 53)
+    blockWay_54_Seolleung_B3 = markerNode("Seolleung_54_B3", 3, 54)
+    blockWay_55_Seolleung_B3 = markerNode("Seolleung_55_B3", 3, 55)
 
     # elevator marker
-    elevator_2_Seolleung_B3 = markerNode(3, 3)
+    elevator_2_Seolleung_B3 = markerNode("Seolleung_EV_2_B3", 3, 3)
 
     #update
     railWay_2_4_Seolleung_B3.update(east=blockWay_55_Seolleung_B3)
@@ -177,11 +178,11 @@ def createB1mapInHanti():
     global elevator_1_Hanti_B1, elevator_2_Hanti_B1
 
     # blockWay marker
-    blockWay_59_Hanti_B1 = markerNode(1, 59)
+    blockWay_59_Hanti_B1 = markerNode("Hanti_59_B1", 1, 59)
 
     # elevator marker
-    elevator_1_Hanti_B1 = markerNode(1, 7)
-    elevator_2_Hanti_B1 = markerNode(1, 8)
+    elevator_1_Hanti_B1 = markerNode("Hanti_EV_1_B1", 1, 7)
+    elevator_2_Hanti_B1 = markerNode("Hanti_EV_2_B1", 1, 8)
 
     #update
     blockWay_59_Hanti_B1.update(south = elevator_2_Hanti_B1, east = elevator_1_Hanti_B1)
@@ -204,17 +205,17 @@ def createB4mapInHanti():
     global elevator_1_Hanti_B4
 
     # railWay marker
-    railWay_2_4_Hanti_B4 = markerNode(4, 4)
-    railWay_3_1_Hanti_B4 = markerNode(4, 5)
-    railWay_3_2_Hanti_B4 = markerNode(4, 6)
+    railWay_2_4_Hanti_B4 = markerNode("Hanti_2_4_B4", 4, 4)
+    railWay_3_1_Hanti_B4 = markerNode("Hanti_3_1_B4", 4, 5)
+    railWay_3_2_Hanti_B4 = markerNode("Hanti_3_2_B4", 4, 6)
 
     #blockWay marker
-    blockWay_56_Hanti_B4 = markerNode(4, 56)
-    blockWay_57_Hanti_B4 = markerNode(4, 57)
-    blockWay_58_Hanti_B4 = markerNode(4, 58)
+    blockWay_56_Hanti_B4 = markerNode("Hanti_56_B4", 4, 56)
+    blockWay_57_Hanti_B4 = markerNode("Hanti_57_B4", 4, 57)
+    blockWay_58_Hanti_B4 = markerNode("Hanti_58_B4", 4, 58)
 
     # elevator marker
-    elevator_1_Hanti_B4 = markerNode(4, 7)
+    elevator_1_Hanti_B4 = markerNode("Hanti_EV_1_B4", 4, 7)
 
     #update
     railWay_2_4_Hanti_B4.update(west = railWay_3_1_Hanti_B4)
@@ -341,23 +342,46 @@ def dataForNextNode(currentLoc, mode):
                 stringList.append("L")
                 stringList.append("Turn_Left")
         stringList.append("F")
-        return stringList
 
     elif mode == 1:
+        if next == None:
+            stringList.append("E")
+            stringList.append("FINISH")
+            stringList.append("E")
+            return stringList
 
+        stringList.append("E")
+        stringList.append("Go_to_B" + str(next.floor) + "_floor")
         stringList.append("E")
 
     elif mode == 2:
-
+        stringList.append("S")
+        stringList.append("Get_off_at_" + str(next.name) + "_platform")
         stringList.append("S")
 
     elif mode == 3:
-
-        if cur == railWay_7_4_Seolleung_B2:
+        if cur == railWay_9_1_Seolleung_B2:
+            stringList.append("L")
+            stringList.append("Turn_Left")
+            stringList.append("F")
+        elif cur == railWay_7_4_Seolleung_B2:
             stringList.append("R")
             stringList.append("Turn_Right_Go_Straight_Turn_Right")
             stringList.append("F")
-            return stringList
+        elif cur == elevator_2_Seolleung_B3:
+            stringList.append("F")
+            stringList.append("Get_off_EV_Go_Straight")
+            stringList.append("F")
+        elif cur == railWay_2_4_Hanti_B4:
+            stringList.append("L")
+            stringList.append("Get_off_Subway_Turn_Left")
+            stringList.append("F")
+        elif cur == elevator_1_Hanti_B1:
+            stringList.append("L")
+            stringList.append("Get_off_EV_Turn_Left")
+            stringList.append("F")
+
+    return stringList
 
 
 #main function
@@ -378,9 +402,13 @@ if __name__ == '__main__':
     stringList = dataForNextNode(currentLocation, 3)
     print("step " + str(i))
     print(stringList)
-    print("ID : " + str(currentNode.id))
+    #print("ID : " + str(currentNode.id))
 
     while True:
+        if routeDataList.routeLength == 0:
+            print("The end")
+            break
+
         i += 1
 
         tempNode = findMarkerLocation(IdList[i])
@@ -399,10 +427,6 @@ if __name__ == '__main__':
 
         routeDataList.deleteHead()
 
-        print("ID : " + str(currentNode.id))
+        #print("ID : " + str(currentNode.id))
         #print("length")
         #print(routeDataList.routeLength)
-
-        if routeDataList.routeLength == 0:
-            print("The end")
-            break
