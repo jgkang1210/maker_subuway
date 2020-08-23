@@ -83,8 +83,9 @@ class routeData:
         node = self.head
         self.head = node.next
         del node
+        self.routeLength -= 1
 
-    def size(self):
+    def length(self):
         return str(self.routeLength)
 
 def createB2mapInSeooleung():
@@ -143,7 +144,7 @@ def createB3mapInSeooleung():
     global elevator_2_Seolleung_B3
 
     # railWay marker
-    railWay_2_4_Seolleung_B3 = markerNode(2, 1)
+    railWay_2_4_Seolleung_B3 = markerNode(3, 4)
 
     # blockWay marker
     blockWay_53_Seolleung_B3 = markerNode(3, 53)
@@ -154,13 +155,13 @@ def createB3mapInSeooleung():
     elevator_2_Seolleung_B3 = markerNode(3, 3)
 
     #update
-    railWay_2_4_Seolleung_B3.update(north=blockWay_55_Seolleung_B3)
+    railWay_2_4_Seolleung_B3.update(east=blockWay_55_Seolleung_B3)
 
-    blockWay_53_Seolleung_B3.update(south=blockWay_54_Seolleung_B3, east=elevator_2_Seolleung_B3)
-    blockWay_54_Seolleung_B3.update(north=blockWay_53_Seolleung_B3, east=blockWay_55_Seolleung_B3)
-    blockWay_55_Seolleung_B3.update(south=railWay_2_4_Seolleung_B3, east=blockWay_54_Seolleung_B3)
+    blockWay_53_Seolleung_B3.update(west=blockWay_54_Seolleung_B3, south=elevator_2_Seolleung_B3)
+    blockWay_54_Seolleung_B3.update(east=blockWay_53_Seolleung_B3, north=blockWay_55_Seolleung_B3)
+    blockWay_55_Seolleung_B3.update(west=railWay_2_4_Seolleung_B3, south=blockWay_54_Seolleung_B3)
 
-    elevator_2_Seolleung_B3.update(west = blockWay_53_Seolleung_B3)
+    elevator_2_Seolleung_B3.update(north = blockWay_53_Seolleung_B3)
 
 
 def createB1mapInHanti():
@@ -208,21 +209,21 @@ def createB4mapInHanti():
     railWay_3_2_Hanti_B4 = markerNode(4, 6)
 
     #blockWay marker
-    blockWay_56_Hanti_B4 = markerNode(4, 53)
-    blockWay_57_Hanti_B4 = markerNode(4, 54)
-    blockWay_58_Hanti_B4 = markerNode(4, 55)
+    blockWay_56_Hanti_B4 = markerNode(4, 56)
+    blockWay_57_Hanti_B4 = markerNode(4, 57)
+    blockWay_58_Hanti_B4 = markerNode(4, 58)
 
     # elevator marker
-    elevator_1_Hanti_B4 = markerNode(3, 3)
+    elevator_1_Hanti_B4 = markerNode(4, 7)
 
     #update
     railWay_2_4_Hanti_B4.update(west = railWay_3_1_Hanti_B4)
-    railWay_3_1_Hanti_B4.update(east = railWay_2_4_Hanti_B4, west = railWay_3_2_Hanti_B4)
-    railWay_3_2_Hanti_B4.update(north = blockWay_56_Hanti_B4, east = railWay_2_4_Hanti_B4)
+    railWay_3_1_Hanti_B4.update(west = railWay_3_2_Hanti_B4, east = railWay_2_4_Hanti_B4)
+    railWay_3_2_Hanti_B4.update(north = blockWay_56_Hanti_B4, east = railWay_3_1_Hanti_B4)
 
-    blockWay_56_Hanti_B4.update(south = railWay_3_2_Hanti_B4,west = blockWay_57_Hanti_B4)
+    blockWay_56_Hanti_B4.update(south = railWay_3_2_Hanti_B4, west = blockWay_57_Hanti_B4)
     blockWay_57_Hanti_B4.update(north = blockWay_58_Hanti_B4, east = blockWay_56_Hanti_B4)
-    blockWay_58_Hanti_B4.update(south = blockWay_57_Hanti_B4, east= elevator_1_Hanti_B4)
+    blockWay_58_Hanti_B4.update(south = blockWay_57_Hanti_B4, west = elevator_1_Hanti_B4)
 
     elevator_1_Hanti_B4.update(east = blockWay_58_Hanti_B4)
 
@@ -280,6 +281,85 @@ def findMarkerLocation(findId):
             print("Not found")
             return
 
+def dataForNextNode(currentLoc, mode):
+    """
+    get the data to go to next node
+
+    :param node: Get the current node data
+    :param mode:
+    0 : Nothing, just go forward
+    1 : Riding elevator, change to E.V. sign
+    2 : Riding subway, change to wait sign
+    3 : Etc, depending on the situation
+
+    :return: string list data which will be sent to web
+    """
+    prev  = currentLoc.prev
+    cur = currentLoc.cur
+    next = currentLoc.next
+    stringList = []
+
+    if mode == 0:
+        if cur.northConnectedNode == next:
+            if cur.southConnectedNode == prev:
+                stringList.append("F")
+                stringList.append("Go_Straight")
+            elif cur.eastConnectedNode == prev:
+                stringList.append("R")
+                stringList.append("Turn_Right")
+            else:
+                stringList.append("L")
+                stringList.append("Turn_Left")
+        elif cur.westConnectedNode == next:
+            if cur.eastConnectedNode == prev:
+                stringList.append("F")
+                stringList.append("Go_Straight")
+            elif cur.northConnectedNode == prev:
+                stringList.append("R")
+                stringList.append("Turn_Right")
+            else:
+                stringList.append("L")
+                stringList.append("Turn_Left")
+        elif cur.southConnectedNode == next:
+            if cur.northConnectedNode == prev:
+                stringList.append("F")
+                stringList.append("Go_Straight")
+            elif cur.westConnectedNode == prev:
+                stringList.append("R")
+                stringList.append("Turn_Right")
+            else:
+                stringList.append("L")
+                stringList.append("Turn_Left")
+        elif cur.eastConnectedNode == next:
+            if cur.westConnectedNode == prev:
+                stringList.append("F")
+                stringList.append("Go_Straight")
+            elif cur.southConnectedNode == prev:
+                stringList.append("R")
+                stringList.append("Turn_Right")
+            else:
+                stringList.append("L")
+                stringList.append("Turn_Left")
+        stringList.append("F")
+        return stringList
+
+    elif mode == 1:
+
+        stringList.append("E")
+
+    elif mode == 2:
+
+        stringList.append("S")
+
+    elif mode == 3:
+
+        if cur == railWay_7_4_Seolleung_B2:
+            stringList.append("R")
+            stringList.append("Turn_Right_Go_Straight_Turn_Right")
+            stringList.append("F")
+            return stringList
+
+
 #main function
 if __name__ == '__main__':
     createB2mapInSeooleung()
@@ -288,4 +368,41 @@ if __name__ == '__main__':
     createB4mapInHanti()
     createRouteForTransfer()
 
-    node = findMarkerLocation(100)
+    IdList = [2, 2, 2, 2, 2, 1, 51, 52, 3, 3, 53, 54, 55, 4, 4, 5, 6, 56, 57, 58, 7, 7, 59, 8]
+    modeList = [3, 0, 0, 0, 0, 3, 0, 0, 1, 3, 0, 0, 0, 2, 3, 0, 0, 0, 0, 0, 1, 3, 0, 1]
+
+    i = 0
+    currentNode = routeDataList.head
+    currentLocation = currentLocation(currentNode.floor, cur = currentNode, next = currentNode.next)
+    routeDataList.deleteHead()
+    stringList = dataForNextNode(currentLocation, 3)
+    print("step " + str(i))
+    print(stringList)
+    print("ID : " + str(currentNode.id))
+
+    while True:
+        i += 1
+
+        tempNode = findMarkerLocation(IdList[i])
+        mode = modeList[i]
+
+        if tempNode.floor != currentNode.floor:
+            currentLocation.updateFloor(tempNode.floor)
+
+        currentLocation.updateLocation(tempNode.next)
+
+        stringList = dataForNextNode(currentLocation, mode)
+        print("step " + str(i))
+        print(stringList)
+
+        currentNode = tempNode
+
+        routeDataList.deleteHead()
+
+        print("ID : " + str(currentNode.id))
+        #print("length")
+        #print(routeDataList.routeLength)
+
+        if routeDataList.routeLength == 0:
+            print("The end")
+            break
