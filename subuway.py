@@ -4,6 +4,9 @@ import numpy as np
 import glob
 import time
 
+print(cv.__version__)
+print(np.__version__)
+
 # We use 250 ID
 aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_250)
 
@@ -121,7 +124,7 @@ def detectMarker(ret, mtx, dist, rvecs, tvecs):
 
     while (1):
         # wait for 1 seconds
-        if time.time() - start > 5:
+        if time.time() - start > 1:
             break
 
         # Take each frame
@@ -149,7 +152,7 @@ def detectMarker(ret, mtx, dist, rvecs, tvecs):
         if tvecs is None:
             cv.imshow('output', frame)
             print("-----------------------------")
-            cv.waitKey(5000)
+            cv.waitKey(10)
             return None, None, None, None
 
         cv.imshow('output', frame_markers)
@@ -274,7 +277,7 @@ def createB2mapInSeooleung():
     railWay_8_2_Seolleung_B2 = markerNode("Seolleung_8_2_B2", 2, 2)
     railWay_8_3_Seolleung_B2 = markerNode("Seolleung_8_3_B2", 2, 2)
     railWay_8_4_Seolleung_B2 = markerNode("Seolleung_8_4_B2", 2, 2)
-    railWay_9_1_Seolleung_B2 = markerNode("Seolleung_9_4_B2", 2, 2)
+    railWay_9_1_Seolleung_B2 = markerNode("Seolleung_9_1_B2", 2, 2)
 
     # blockWay marke
     blockWay_51_Seolleung_B2 = markerNode("Seolleung_51_B2", 2, 51)
@@ -567,34 +570,42 @@ if __name__ == '__main__':
     i = 0
 
     while True:
+        if i == 8:
+            print("")
+
         if routeDataList.routeLength == 0:
             print("The end")
             break
 
+        #First recognization
         ids, fixedCorners, rvecs, tvecs = detectMarker(ret, mtx, dist, rvecs, tvecs)
+
         if ids == None:
+            print("Can't recognize")
             continue
         else:
-            print(ids)
-            currentNode = routeDataList.selectNode(ids)
+            currentNode = findMarkerLocation(ids)
+            if currentNode is None:
+                print("Wrong way")
+                continue
 
-        tempNode = findMarkerLocation(IdList[i])
         mode = modeList[i]
-
-        if tempNode.floor != currentNode.floor:
-            currentLocation.updateFloor(tempNode.floor)
 
         if i == 0:
             currentLocation = currentLocation(currentNode.floor, cur = currentNode, next = currentNode.next)
         else:
-            currentLocation.updateLocation(tempNode.next)
+            currentLocation.updateLocation(currentNode.next)
+            if currentLocation.prev.floor != currentLocation.cur.floor:
+                currentLocation.updateFloor(currentLocation.cur.floor)
 
         stringList = dataForNextNode(currentLocation, mode)
         print("step " + str(i))
         print(stringList)
 
-        currentNode = tempNode
-
         routeDataList.deleteHead()
+
+        print("Wait a moment")
+        cv.waitKey(1000)
+        print("NEXT")
 
         i += 1
